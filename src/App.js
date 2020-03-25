@@ -1,24 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-function App() {
+// opcion 1
+import { wipeUsers, fetchThunk } from "./actions/";
+
+// opcion 2
+// import { wipeUsers, fetchThunk } from "./reducers/user";
+
+function App(props) {
+  const user = useSelector(s => s.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchThunk());
+  }, [dispatch]);
+
+  const monos = user.map(item => (
+    <p style={{ padding: 10, border: "1px solid blue", textAlign: "center" }}>
+      {item.username}
+    </p>
+  ));
+  const onDelete = () => {
+    dispatch(wipeUsers());
+  };
+
+  // console.log(actions);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>user:</h1>
+      {monos}
+      <hr />
+      <button onClick={onDelete}>borrar</button>
     </div>
   );
 }
